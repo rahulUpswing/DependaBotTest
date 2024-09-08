@@ -25,7 +25,7 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-	implementation("org.springframework:spring-core:4.1.4.RELEASE")
+	implementation("org.springframework:spring-core:6.1.12")
 	implementation("org.springframework:spring-web:5.3.6")
 	implementation("org.springframework:spring-webmvc:6.0.1")
 	implementation("org.springframework:spring-expression:5.2.17.RELEASE")
