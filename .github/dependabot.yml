@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily" # "daily", "weekly", "monthly"
+      interval: "weekly" # "daily", "weekly", "monthly"
     commit-message:
       prefix: "chore" # Prefix title and commit message with a string
       include: "scope" #  Include the package scope in the commit message
