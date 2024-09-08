@@ -25,6 +25,8 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+	implementation("org.springframework:spring-core:4.1.4.RELEASE")
+
 	implementation("org.json:json:20220924")
 }
 
