@@ -35,7 +35,7 @@ dependencies {
 	implementation("org.springframework:spring-expression:5.2.17.RELEASE")
 	implementation("org.springframework:spring-expression:5.2.17.RELEASE")
 
-	implementation("org.json:json:20220924")
+	implementation("org.json:json:20240303")
 }
 
 kotlin {
