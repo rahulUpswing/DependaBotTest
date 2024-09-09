@@ -32,8 +32,8 @@ dependencies {
 	implementation("org.springframework:spring-core:4.1.4.RELEASE")
 	implementation("org.springframework:spring-web:5.3.6")
 	implementation("org.springframework:spring-webmvc:6.0.1")
-	implementation("org.springframework:spring-expression:5.2.17.RELEASE")
-	implementation("org.springframework:spring-expression:5.2.17.RELEASE")
+	implementation("org.springframework:spring-expression:6.1.12")
+	implementation("org.springframework:spring-expression:6.1.12")
 
 	implementation("org.json:json:20220924")
 }
