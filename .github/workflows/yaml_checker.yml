@@ -9,7 +9,7 @@ jobs:
   yaml-lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: 'Checkout'
         uses: actions/checkout@v3
 
       - name: Install yamllint
@@ -19,8 +19,4 @@ jobs:
 
       - name: Run yamllint on YAML files for syntax errors only
         run: |
-          yamllint -s . -f parsable # Only check for syntax errors
-
-      - name: Check for any YAML files with syntax errors
-        run: |
-          yamllint . -f parsable # Check all YAML files, including syntax errors
+          yamllint -s . -f parsable  # Only check for syntax errors using the custom config

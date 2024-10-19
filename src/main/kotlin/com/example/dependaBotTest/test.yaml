@@ -1,0 +1,214 @@
+rule_groups:
+  service_api_alert:
+    rules:
+      error_0:
+        enabled: true
+        criteria:
+          threshold:
+            count: 4
+        aggregation_on: instance
+        filters:
+          - field: path
+            operator: "!~"
+            value: ".*actuator.*"
+          - field: response_code
+            operator: "="
+            value: "0"
+          - field: upstream_cluster
+            operator: "="
+            value: "inbound|8080||"
+          - field: authority
+            operator: "!="
+            value: "public.api.upswing.one"
+      5xx:
+        enabled: true
+        criteria:
+          threshold:
+            count: 2
+        aggregation_on: instance
+        filters:
+          - field: path
+            operator: "!~"
+            value: ".*actuator.*"
+          - field: response_code
+            operator: "=~"
+            value: "5.."
+          - field: path
+            operator: "!~"
+            value: ".*ibcCreation\\?ibcoi=IBCO_()"
+          - field: usw_is_external_api_failure # 5xx due to external API failures, this is to prevent duplicate alerts as it conflicts with `product_health_exceptions` alert
+            operator: "!="
+            value: "true"
+          - field: path
+            operator: "!="
+            value: "/internal/v1/onboarding/ibco/status?ibcoi=IBCO_525903908448013278"
+          - field: path
+            operator: "!="
+            value: "/internal/v1/onboarding/internalDto"
+      public_api_error_0:
+        enabled: true
+        criteria:
+          threshold:
+            count: 4
+        aggregation_on: instance
+        filters:
+          - field: response_code
+            operator: "="
+            value: "0"
+          - field: upstream_cluster
+            operator: "="
+            value: "inbound|8080||"
+          - field: authority
+            operator: "="
+            value: "public.api.upswing.one"
+          - field: duration
+            operator: ">"
+            value: "29000"
+      internal_DTO_failure: # Silence until due data > https://upswing-one.atlassian.net/browse/SA-169
+        enabled: true
+        criteria:
+          threshold:
+            count: 2
+        aggregation_on: instance
+        filters:
+          - field: response_code
+            operator: "="
+            value: "500"
+          - field: path
+            operator: "="
+            value: "/internal/v1/onboarding/internalDtoo"
+  service_app_alert:
+    rules:
+      generic_app_error:
+        enabled: true
+        criteria:
+          threshold:
+            count: 25
+        aggregation_on: instance
+        filters:
+          - field: level
+            operator: "="
+            value: "ERROR"
+          - field: exception
+            operator: "!~"
+            value: "(?s).*Vkyc status USER_ACTION_DONE.*"
+          - field: exception
+            operator: "!~"
+            value: ".*MonoCoroutine was cancelled.*"
+          - field: logger
+            operator: "!~"
+            value: "one.upswing.product-health.*"
+          - field: exception
+            operator: "!~"
+            value: ".*CRN was expected after TD completion BOOKED for NESFIN.*"
+      cug_limit_breached:
+        enabled: true
+        alert_receivers:
+          slack:
+            - channel_name: "C07NYMDMPEK"
+        aggregation_on: logger
+        criteria:
+          threshold:
+            count: 1
+        filters:
+          - field: level
+            operator: "="
+            value: "INFO"
+          - field: logger
+            operator: "=~"
+            value: ".*FirstXCugDao.*"
+          - field: message
+            operator: "=~"
+            value: ".*CUG limit breached.*"
+      critical:
+        enabled: true
+        aggregation_on: logger
+        criteria:
+          threshold:
+            count: 1
+        filters:
+          - field: logger
+            operator: "="
+            value: "critical-alerts"
+          - field: message
+            operator: "!~"
+            value: ".*mandatory PERMANENT_ADDRESS is missing.*"
+      dead_letter:
+        enabled: true
+        aggregation_on: logger
+        criteria:
+          threshold:
+            count: 1
+        filters:
+          - field: message
+            operator: "=~"
+            value: "(?s).*Moved to DLQ.*"
+          - field: message
+            operator: "!~"
+            value: ".*v1.fsi-onboarding-document.*"
+      message_production_failed:
+        enabled: true
+        aggregation_on: logger
+        criteria:
+          threshold:
+            count: 1
+        filters:
+          - field: message
+            operator: "=~"
+            value: "(?s).*Failed to produce.*"
+
+      # product health exceptions - only for channel alert-prod-product-health-cs
+      product_health_exceptions:
+        enabled: true
+        alert_receivers: #This will route the alerts to the other channels.
+          slack:
+            - channel_name: "C07NYMDMPEK" # Channel name: alert-prod-product-health-cs
+        aggregation_on: logger
+        criteria:
+          threshold:
+            count: 5
+        filters:
+          - field: logger
+            operator: "=~"
+            value: "one.upswing.product-health.*"
+          - field: message
+            operator: "!~"
+            value: ".*public.api.upswing.one/public/v1/onboarding/ekyc/submit/failure.*" # https://upswing-one.atlassian.net/browse/SA-93
+          - field: message
+            operator: "!~"
+            value: ".*IBCO_525903908448013278.*"  # https://upswing-one.atlassian.net/browse/SA-168
+          - field: message
+            operator: "!~"
+            value: ".*Invalid email sachin.*"   # https://upswing-one.atlassian.net/browse/SA-169
+
+      #To remove below alert rules after there resolution is done, also search for ticket ID and remove every filters from other places.
+      sib_ekyc_failure_submit: # https://upswing-one.atlassian.net/browse/SA-93
+        enabled: true
+        alert_receivers:
+          slack:
+            - channel_name: "C07NYMDMPEK"
+        aggregation_on: instance
+        criteria:
+          threshold:
+            count: 5
+        filters:
+          - field: message
+            operator: "=~"
+            value: ".*public.api.upswing.one/public/v1/onboarding/ekyc/submit/failure.*" #sib submit failure invalid error codes
+
+      ibco_does_not_exist: # https://upswing-one.atlassian.net/browse/SA-168
+        enabled: true
+        alert_receivers:
+          slack:
+            - channel_name: "C07NYMDMPEK"
+        aggregation_on: instance
+        criteria:
+          threshold:
+            count: 5
+        filters:
+          - field: logger
+            operator: "=~"
+            value: "one.upswing.product-health.*"
+          - field: message
+            operator: "=~"
+            value: ".*IBCO_525903908448013278.*"
