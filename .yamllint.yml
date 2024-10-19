@@ -3,5 +3,6 @@ extends: default
 rules:
   line-length: disable # Disable line length check
   empty-lines: disable
+  comments: disable
 
 
