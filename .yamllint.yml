@@ -3,7 +3,4 @@ extends: default
 rules:
   line-length:
     max: 0  # Disable line length check
-  comments:
-    # Disable the entire comments rule if you want to ignore all comment warnings
-    enable: false
 
