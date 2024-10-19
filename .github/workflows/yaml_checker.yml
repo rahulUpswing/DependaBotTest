@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: yamllint
-        uses: anosborn/github-action-yamllint@v1
+        uses: nosborn/github-action-yamllint@v1
 
       - name: Install yamllint
         run: |
