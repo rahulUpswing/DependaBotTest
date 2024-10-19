@@ -76,7 +76,7 @@ rule_groups:
             value: "500"
           - field: path
             operator: "="
-            value: "/internal/v1/onboarding/internalDto"
+            value: "/internal/v1/onboarding/internalDo"
   service_app_alert:
     rules:
       generic_app_error:
