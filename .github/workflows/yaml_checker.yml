@@ -2,8 +2,9 @@ name: YAML Lint
 
 on:
   pull_request:
-    branches:
-      - main
+    paths:
+      - '**/*.yml'
+      - '**/*.yaml'
 
 jobs:
   lint:
@@ -41,3 +42,4 @@ jobs:
             ```yaml
             ${{ steps.yamllint.outputs.lint_result }}
             ```
+
