@@ -1,4 +1,6 @@
 extends: default
+ignore: |
+  *.workflows.*
 
 rules:
   line-length: disable
@@ -7,6 +9,3 @@ rules:
   comments-indentation: disable
   document-start: disable
   truthy: disable
-
-ignore: |
-  *.workflows.*
