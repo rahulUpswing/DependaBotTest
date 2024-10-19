@@ -1,0 +1,7 @@
+extends: default
+
+rules:
+  line-length:
+    max: 0  # Disable line length check
+  comments:
+    too-few-spaces: disable  # Disable warning for too few spaces before comment
