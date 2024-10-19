@@ -8,4 +8,4 @@ rules:
   document-start: disable
   truthy: disable
 ignore:
-  - ub/workflows/*
+  - ub/workflows/*.yaml
