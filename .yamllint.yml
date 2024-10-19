@@ -1,6 +1,8 @@
 extends: default
-ignore: |
-  *.workflows.*
+ignore:
+  - "ub/workflows/blank.yml"  # Ignore this specific file
+  - "ub/workflows/*.yml"       # Ignore all YAML files in the 'ub/workflows' directory
+  - "**/workflows/**"           # Ignore any 'workflows' directory at any level
 
 rules:
   line-length: disable
