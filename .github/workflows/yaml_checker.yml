@@ -1,7 +1,9 @@
 name: 'Yamllint GitHub Actions'
 
 on:
-  pull_request
+  pull_request:
+    branches:
+      - main
 
 jobs:
   yamllint:
@@ -11,11 +13,22 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v3
 
-      - name: 'Yamllint'
+      - name: 'Get list of modified YAML files'
+        id: yaml_files
+        run: |
+          changed_files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '\.yaml$' || true)
+          echo "changed_files=$changed_files" >> $GITHUB_ENV
+
+      - name: 'Yamllint (only on changed files)'
+        if: env.changed_files != ''
         uses: karancode/yamllint-github-action@master
         with:
-          yamllint_file_or_dir: '.' # Lint all YAML files in the repository
-          yamllint_strict: false # Set to true if you want stricter linting
-          yamllint_comment: true # Adds a comment on PR if linting fails
+          yamllint_file_or_dir: ${{ env.changed_files }} # Only lint the changed YAML files
+          yamllint_strict: false
+          yamllint_comment: true
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'No YAML files to lint'
+        if: env.changed_files == ''
+        run: echo "No YAML files modified in this PR."
