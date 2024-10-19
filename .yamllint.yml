@@ -1,6 +1,5 @@
 extends: default
 
 rules:
-  line-length:
-    max: 0  # Disable line length check
+  line-length: disable # Disable line length check
 
