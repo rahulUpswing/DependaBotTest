@@ -4,4 +4,6 @@ rules:
   line-length:
     max: 0  # Disable line length check
   comments:
-    too-few-spaces: disable  # Disable warning for too few spaces before comment
+    # Disable the entire comments rule if you want to ignore all comment warnings
+    enable: false
+
