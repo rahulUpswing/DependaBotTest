@@ -1,4 +1,4 @@
-name: YAML Lint Check
+name: YAML Check
 
 on:
   pull_request:
@@ -17,10 +17,10 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y yamllint
 
-    - name: Run yamllint on YAML files
+    - name: Run yamllint on YAML files with detailed output
       run: |
-        yamllint .
-        
-    - name: Check for format issues
+        yamllint . -f parsable
+
+    - name: Check for format issues (strict mode)
       run: |
-        yamllint --strict .
+        yamllint --strict . -f parsable
