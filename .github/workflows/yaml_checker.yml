@@ -9,7 +9,7 @@ jobs:
   yaml-lint:
     runs-on: ubuntu-latest
     steps:
-      - name: yamllint
+      - name: 'yamllint'
         uses: nosborn/github-action-yamllint@v1
 
       - name: Install yamllint
