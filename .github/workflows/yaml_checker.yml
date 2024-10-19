@@ -18,10 +18,21 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y yamllint
 
-      - name: Run yamllint
+      - name: Run yamllint and save results
         id: yamllint
         run: |
           yamllint . > yamllint_report.txt || true
+          cat yamllint_report.txt
+
+      - name: Fail if yamllint found issues
+        run: |
+          if grep -q . yamllint_report.txt; then
+            echo "YAML linting errors found:"
+            cat yamllint_report.txt
+            exit 1
+          else
+            echo "No YAML linting issues found"
+          fi
 
       - name: Upload YAML Lint results
         if: failure()
