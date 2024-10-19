@@ -1,4 +1,4 @@
-name: YAML Check
+name: Check YAML Files
 
 on:
   pull_request:
@@ -6,21 +6,18 @@ on:
       - main
 
 jobs:
-  yaml-lint:
+  check-yaml:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Install yamllint
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y yamllint
-
-    - name: Run yamllint on YAML files with detailed output
-      run: |
-        yamllint . -f parsable
-
-    - name: Check for format issues (strict mode)
-      run: |
-        yamllint --strict . -f parsable
+      - uses: actions/checkout@v3
+      - name: Install yamllint
+        run: pip install yamllint
+      - name: Lint YAML files
+        run: |
+          yamllint ./**/*.yaml --strict --format=json > yaml_lint_report.json
+      - name: Check for lint errors
+        run: |
+          if [ $(jq '.[].level' yaml_lint_report.json | wc -l) -gt 0 ]; then
+            echo "YAML linting found errors. Check yaml_lint_report.json for details."
+            exit 1
+          fi
