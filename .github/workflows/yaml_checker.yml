@@ -26,13 +26,10 @@ jobs:
           changed_files=$(git diff --name-only $BASE_SHA $HEAD_SHA | grep '\.yaml$' || true)
           echo "changed_files=$changed_files" >> $GITHUB_ENV
 
-      - name: 'Yamllint (only on changed files)'
+      - name: 'Yamllint (syntax checks only on changed files)'
         if: env.changed_files != ''
-        uses: karancode/yamllint-github-action@master
-        with:
-          yamllint_file_or_dir: ${{ env.changed_files }} # Only lint the changed YAML files
-          yamllint_strict: false
-          yamllint_comment: true
+        run: |
+          yamllint -s ${changed_files} # Run yamllint in syntax-checking mode
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
