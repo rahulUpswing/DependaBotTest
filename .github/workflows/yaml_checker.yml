@@ -1,4 +1,4 @@
-name: YAML Parsing Check
+name: YAML Check
 
 on:
   pull_request:
