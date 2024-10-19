@@ -42,4 +42,3 @@ jobs:
             ```yaml
             ${{ steps.yamllint.outputs.lint_result }}
             ```
-
