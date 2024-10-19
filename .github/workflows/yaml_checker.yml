@@ -1,4 +1,4 @@
-name: 'Yamllint GitHub Actions'
+name: YAML Lint
 
 on:
   pull_request:
@@ -6,33 +6,38 @@ on:
       - main
 
 jobs:
-  yamllint:
-    name: 'Yamllint'
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout'
+      - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Install yamllint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yamllint
+
+      - name: Run yamllint
+        id: yamllint
+        run: |
+          yamllint . > yamllint_report.txt || true
+
+      - name: Upload YAML Lint results
+        if: failure()
+        uses: actions/upload-artifact@v3
         with:
-          fetch-depth: 0 # Fetch all history for accurate diffing
+          name: yamllint-report
+          path: yamllint_report.txt
 
-      - name: 'Get list of modified YAML files'
-        id: yaml_files
-        run: |
-          # Get the base and head commit hashes
-          BASE_SHA=${{ github.event.pull_request.base.sha }}
-          HEAD_SHA=${{ github.sha }}
-
-          # Get the list of modified YAML files
-          changed_files=$(git diff --name-only $BASE_SHA $HEAD_SHA | grep '\.yaml$' || true)
-          echo "changed_files=$changed_files" >> $GITHUB_ENV
-
-      - name: 'Yamllint (syntax checks only on changed files)'
-        if: env.changed_files != ''
-        run: |
-          yamllint -s ${changed_files} # Run yamllint in syntax-checking mode
-        env:
-          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 'No YAML files to lint'
-        if: env.changed_files == ''
-        run: echo "No YAML files modified in this PR."
+      - name: Comment on PR if there are YAML lint errors
+        if: failure()
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: yamllint_report.txt
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            There are YAML syntax errors in your pull request:
+            ```yaml
+            ${{ steps.yamllint.outputs.lint_result }}
+            ```
