@@ -1,13 +1,12 @@
-name: YAML Lint
+name: YAML Lint Check
 
 on:
   pull_request:
-    paths:
-      - '**/*.yml'
-      - '**/*.yaml'
+    branches:
+      - main
 
 jobs:
-  lint:
+  yaml-lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,38 +17,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y yamllint
 
-      - name: Run yamllint and save results
-        id: yamllint
+      - name: Run yamllint on YAML files for syntax errors only
         run: |
-          yamllint . > yamllint_report.txt || true
-          cat yamllint_report.txt
+          yamllint -s . -f parsable # Only check for syntax errors
 
-      - name: Fail if yamllint found issues
+      - name: Check for any YAML files with syntax errors
         run: |
-          if grep -q . yamllint_report.txt; then
-            echo "YAML linting errors found:"
-            cat yamllint_report.txt
-            exit 1
-          else
-            echo "No YAML linting issues found"
-          fi
-
-      - name: Upload YAML Lint results
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: yamllint-report
-          path: yamllint_report.txt
-
-      - name: Comment on PR if there are YAML lint errors
-        if: failure()
-        uses: peter-evans/create-or-update-comment@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: yamllint_report.txt
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            There are YAML syntax errors in your pull request:
-            ```yaml
-            ${{ steps.yamllint.outputs.lint_result }}
-            ```
+          yamllint . -f parsable # Check all YAML files, including syntax errors
