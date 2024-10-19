@@ -1,23 +1,21 @@
-name: Check YAML Files
+name: 'Yamllint GitHub Actions'
 
 on:
-  pull_request:
-    branches:
-      - main
+  pull_request
 
 jobs:
-  check-yaml:
+  yamllint:
+    name: 'Yamllint'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Install yamllint
-        run: pip install yamllint
-      - name: Lint YAML files
-        run: |
-          yamllint ./**/*.yaml --strict --format=standard > yaml_lint_report.json
-      - name: Check for lint errors
-        run: |
-          if [ $(jq '.[].level' yaml_lint_report.json | wc -l) -gt 0 ]; then
-            echo "YAML linting found errors. Check yaml_lint_report.json for details."
-            exit 1
-          fi
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+
+      - name: 'Yamllint'
+        uses: karancode/yamllint-github-action@master
+        with:
+          yamllint_file_or_dir: '.' # Lint all YAML files in the repository
+          yamllint_strict: false # Set to true if you want stricter linting
+          yamllint_comment: true # Adds a comment on PR if linting fails
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
