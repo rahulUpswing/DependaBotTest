@@ -1,0 +1,26 @@
+name: YAML Lint Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  yaml-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install yamllint
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y yamllint
+
+    - name: Run yamllint on YAML files
+      run: |
+        yamllint .
+        
+    - name: Check for format issues
+      run: |
+        yamllint --strict .
