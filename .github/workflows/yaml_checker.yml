@@ -12,11 +12,18 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history for accurate diffing
 
       - name: 'Get list of modified YAML files'
         id: yaml_files
         run: |
-          changed_files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '\.yaml$' || true)
+          # Get the base and head commit hashes
+          BASE_SHA=${{ github.event.pull_request.base.sha }}
+          HEAD_SHA=${{ github.sha }}
+
+          # Get the list of modified YAML files
+          changed_files=$(git diff --name-only $BASE_SHA $HEAD_SHA | grep '\.yaml$' || true)
           echo "changed_files=$changed_files" >> $GITHUB_ENV
 
       - name: 'Yamllint (only on changed files)'
