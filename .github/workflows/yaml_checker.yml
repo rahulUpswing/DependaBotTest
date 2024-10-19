@@ -14,3 +14,11 @@ jobs:
           paths: |
             .github/workflows/*.yml
             .github/actions/*.yml
+
+      - name: Run yamllint on YAML files for syntax errors only
+        run: |
+          yamllint -s . -f parsable # Only check for syntax errors
+
+      - name: Check for any YAML files with syntax errors
+        run: |
+          yamllint . -f parsable # Check all YAML files, including syntax errors
