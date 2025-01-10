@@ -1,8 +1,4 @@
 extends: default
-ignore:
-  - "ub/workflows/blank.yml"  # Ignore this specific file
-  - "ub/workflows/*.yml"       # Ignore all YAML files in the 'ub/workflows' directory
-  - "**/workflows/**"           # Ignore any 'workflows' directory at any level
 
 rules:
   line-length: disable
@@ -11,3 +7,15 @@ rules:
   comments-indentation: disable
   document-start: disable
   truthy: disable
+  quoted-strings:
+    required: false
+    extra-required:
+      - "^\\d{15,}$"  # Enforce quotes for numbers with 15+ digits
+    extra-allowed: []
+    allow-quoted-quotes: false
+    check-keys: false
+
+  custom-rule:
+    pattern: "^\\s*\\d{15,}\\s*$"  # Disallow any long numbers (unquoted or standalone)
+    message: "Numbers (15+ digits) must not be configured without quotes"
+    severity: error
