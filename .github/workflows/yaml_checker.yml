@@ -4,19 +4,37 @@ on:
   pull_request:
     branches:
       - main
-
 jobs:
   yaml-lint:
+    name: Run YAML Linter
     runs-on: ubuntu-latest
+
     steps:
-      - name: 'Checkout'
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install yamllint
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y yamllint
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
 
-      - name: Run yamllint on YAML files for syntax errors only
-        run: |
-          yamllint -s . -f parsable  # Only check for syntax errors using the custom config
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Lint YAML files
+        run: yamllint .
+# jobs:
+#   yaml-lint:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: 'Checkout'
+#         uses: actions/checkout@v3
+
+#       - name: Install yamllint
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y yamllint
+
+#       - name: Run yamllint on YAML files for syntax errors only
+#         run: |
+#           yamllint -s . -f parsable  # Only check for syntax errors using the custom config
