@@ -198,7 +198,7 @@ rule_groups:
 
       ibco_does_not_exist: # https://upswing-one.atlassian.net/browse/SA-168
         enabled: true
-        first-id: 1421423432423423542543254324
+        first-id: "1421423432423423542543254324"
         valid-id: 14214234322
         alert_receivers:
           slack:
