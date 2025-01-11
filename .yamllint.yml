@@ -8,14 +8,8 @@ rules:
   document-start: disable
   truthy: disable
   quoted-strings:
+    level: error
     required: false
     extra-required:
       - "^\\d{15,}$"  # Enforce quotes for numbers with 15+ digits
-    extra-allowed: []
-    allow-quoted-quotes: false
-    check-keys: false
-
-  custom-rule:
-    pattern: "^\\s*\\d{15,}\\s*$"  # Disallow any long numbers (unquoted or standalone)
-    message: "Numbers (15+ digits) must not be configured without quotes"
-    severity: error
+    quote-type: any
