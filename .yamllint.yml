@@ -11,8 +11,9 @@ rules:
   new-line-at-end-of-file: disable
   indentation: disable
   quoted-strings:
-    level: error
     required: false
     extra-required:
       - "^\\d{15,}$"  # Enforce quotes for numbers with 15+ digits
-    quote-type: any
+    extra-allowed: []
+    allow-quoted-quotes: false
+    check-keys: false
