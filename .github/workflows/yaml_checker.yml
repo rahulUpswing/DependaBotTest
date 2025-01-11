@@ -4,9 +4,10 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
   yaml-lint:
-    name: Run YAML Linter
+    name: Run YAML Linter and Custom Checks
     runs-on: ubuntu-latest
 
     steps:
@@ -23,6 +24,10 @@ jobs:
 
       - name: Lint YAML files
         run: yamllint .
+
+      - name: Run custom YAML validation
+        run: python custom_yaml_validation.py
+
 # jobs:
 #   yaml-lint:
 #     runs-on: ubuntu-latest
