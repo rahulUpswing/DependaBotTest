@@ -26,7 +26,7 @@ jobs:
         run: yamllint .
 
       - name: Run custom YAML validation
-        run: python custom_yaml_validation.py
+        run: python custom_yaml_validator.py
 
 # jobs:
 #   yaml-lint:
