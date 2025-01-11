@@ -212,4 +212,4 @@ rule_groups:
           - field: message
             operator: "=~"
             value: ".*IBCO_525903908448013278.*"
-            principal-id: 14214234324234235425432543
+            principal-id: "14214234324234235425432543"

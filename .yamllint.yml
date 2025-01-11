@@ -10,12 +10,3 @@ rules:
   trailing-spaces: disable
   new-line-at-end-of-file: disable
   indentation: disable
-  quoted-strings:
-    level: error
-    required: false
-    extra-required:
-      - "(?<!['\"])[0-9]{15,}(?!['\"])"
-    extra-allowed: []
-    allow-quoted-quotes: false
-    check-keys: false
-    quote-type: any
