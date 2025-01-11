@@ -14,7 +14,7 @@ rules:
     level: error
     required: false
     extra-required:
-      - '[0-9]{15,}' # Simpler pattern for 15+ digits
+      - '^[0-9]{15,}$'
     extra-allowed: []
     allow-quoted-quotes: false
     check-keys: false
