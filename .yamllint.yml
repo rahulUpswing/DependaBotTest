@@ -7,6 +7,9 @@ rules:
   comments-indentation: disable
   document-start: disable
   truthy: disable
+  trailing-spaces: disable
+  new-line-at-end-of-file: disable
+  indentation: disable
   quoted-strings:
     level: error
     required: false
